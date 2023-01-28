@@ -12,7 +12,8 @@ exports.authMiddleware = (req, res ) => {
     (err, decoded) => {
         if (err) return res.sendStatus(403); //invalid token
 
-        res.send(decoded.existingUser)
+        // res.send(decoded.existingUser)
+        res.send(token);
       }
     );
 

@@ -14,8 +14,14 @@ const userSchema=new Schema({
     password:{
         type:String,
         required:true,
-    }
+    },
 
+    // roles: { type: Object, default: {"User": 200} },
+    
+    isAdmin:{
+        type:Boolean,
+        required:true,
+    }
 });
 
 const User=model("users",userSchema);

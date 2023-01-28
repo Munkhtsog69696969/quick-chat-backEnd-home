@@ -17,6 +17,8 @@ exports.createNewUser=async(req,res)=>{
 
     const password=req.body.password;
 
+    const isAdmin=req.body.isAdmin;
+
     const existingUser=await User.findOne({email});
 
     if(existingUser && existingUser!==""){
@@ -27,11 +29,12 @@ exports.createNewUser=async(req,res)=>{
 
             const hash=bcrypt.hashSync(password , salt);
 
-            const newUser=await User.create({username:username , email:email , password:hash});
+            const newUser=await User.create({username:username , email:email , password:hash , isAdmin:isAdmin});
     
             newUser.save();
     
             res.send("Created new user.");
+            // res.send(newUser)
         } else{
            if(errors.errors[0].param=="email"){
             res.send("Invalid email.");
@@ -73,4 +76,20 @@ exports.loginUser=async(req,res,next)=>{
     }else{
         res.send("User doesnt exist.");
     }
+}
+
+exports.getUsers=async(req,res)=>{
+    const page=req.query.pages;
+
+    const num=req.params.num;
+
+    const users=await User.find({}).skip(num*(page-1)).limit(num);
+
+    res.send(users);
+}
+
+exports.getAllUsers=async(req,res)=>{
+    const allUsers=await User.find({});
+
+    res.send(allUsers);
 }
